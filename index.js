@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const usersRoutes = require('./routes/users.js');
+require('dotenv').config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -17,9 +18,7 @@ app.use(
 
 // database connection and server listening
 mongoose
-    .connect(
-        'mongodb://127.0.0.1:27017/smart_kids?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.8.2'
-    )
+    .connect(process.env.DB_URI)
     .then(() => {
         app.listen(PORT, () => {
             console.log(`Server running | http://localhost:${PORT}`);
@@ -29,3 +28,14 @@ mongoose
 
 // routes
 app.use('/users', usersRoutes);
+
+// default error handling
+app.use((err, req, res, next) => {
+    const status = err.status || 500;
+    const message = err.message || 'Something went wrong!';
+    return res.status(status).json({
+        success: false,
+        status,
+        message,
+    });
+});
