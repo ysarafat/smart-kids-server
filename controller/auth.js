@@ -3,21 +3,27 @@ const jwt = require('jsonwebtoken');
 const User = require('../model/users');
 const createError = require('../error');
 
-const signupUser = async (req, res) => {
+const signupUser = async (req, res, next) => {
     try {
-        const salt = bcrypt.genSaltSync(10);
-        const hashPassword = bcrypt.hashSync(req.body.password, salt);
-        const newUser = new User({ ...req.body, password: hashPassword });
+        const { name, userName, email, password } = req.body;
+
+        // check existing user
+        const existingUserNameUser = await User.findOne({ userName });
+        if (existingUserNameUser) {
+            return res.status(409).json({ error: 'UserName already exists.' });
+        }
+        const existingEmailUser = await User.findOne({ email });
+        if (existingEmailUser) {
+            return res.status(409).json({ error: 'Email already exists.' });
+        }
+
+        // Create a new user
+        const newUser = new User({ name, userName, email, password });
         await newUser.save();
-        return res.status(201).json({
-            success: true,
-            message: 'SignUp successful',
-        });
-    } catch (error) {
-        res.status(409).json({
-            success: false,
-            message: error.message,
-        });
+
+        res.status(201).json({ success: true, message: 'User registered successfully.' });
+    } catch {
+        next(createError(500, 'There was an error'));
     }
 };
 
@@ -49,10 +55,12 @@ const signInUser = async (req, res, next) => {
                 .json({
                     success: true,
                     message: 'Authentication Successful',
+                    access_token: token,
                     data: other,
                 });
         }
-    } catch {
+    } catch (err) {
+        console.log(err);
         next(createError(500, 'There was an error'));
     }
 };

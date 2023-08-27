@@ -12,6 +12,11 @@ const userSchema = new mongoose.Schema(
             unique: [true, 'User  name already exist'],
             minlength: [5, 'user Name length must be 5'],
         },
+        role: {
+            type: String,
+            enum: ['student', 'admin', 'teacher'],
+            default: 'student',
+        },
         email: {
             type: String,
             unique: [true, 'Email already exist'],
@@ -24,4 +29,5 @@ const userSchema = new mongoose.Schema(
     },
     { timestamps: true }
 );
+
 module.exports = mongoose.model('User', userSchema);
