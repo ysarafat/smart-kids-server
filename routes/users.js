@@ -1,10 +1,8 @@
 const express = require('express');
-const { signupUser, signInUser } = require('../controller/auth.js');
+const verifyToken = require('../middleware/verifyToken');
 
-const route = express.Router();
-// register user
-route.post('/signup', signupUser);
-// login user
-route.post('/signin', signInUser);
+const router = express.Router();
 
-module.exports = route;
+// get a user
+router.get('/find/:id', verifyToken);
+module.export = router;
