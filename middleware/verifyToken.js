@@ -3,7 +3,7 @@ const createError = require('../error');
 
 const verifyToken = (req, res, next) => {
     const { authorization } = req.headers;
-    console.log(authorization);
+
     if (!authorization) {
         return next(createError(401, 'Unauthorized access'));
     }

@@ -2,7 +2,8 @@ const cookieParser = require('cookie-parser');
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
-const usersRoutes = require('./routes/auth.js');
+const authRoutes = require('./routes/auth.js');
+const usersRoutes = require('./routes/users.js');
 require('dotenv').config();
 
 const app = express();
@@ -29,6 +30,7 @@ mongoose
     .catch((err) => console.log(err));
 
 // routes
+app.use('/auth', authRoutes);
 app.use('/users', usersRoutes);
 
 // default error handling
