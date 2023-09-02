@@ -4,6 +4,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const authRoutes = require('./routes/auth.js');
 const usersRoutes = require('./routes/users.js');
+const CourseRoutes = require('./routes/course.js');
 require('dotenv').config();
 
 const app = express();
@@ -32,6 +33,7 @@ mongoose
 // routes
 app.use('/auth', authRoutes);
 app.use('/users', usersRoutes);
+app.use('/course', CourseRoutes);
 
 // default error handling
 app.use((err, req, res, next) => {
