@@ -78,4 +78,52 @@ const enrolledCourse = async (req, res, next) => {
         next(createError(500, 'There was an error'));
     }
 };
-module.exports = { createCourse, updateCourse, enrolledCourse };
+// get all course
+const getAllCourse = async (req, res, next) => {
+    try {
+        const result = await Course.find().sort({ createdAt: -1 }).select({ __v: 0 });
+        res.status(200).json({
+            success: true,
+            message: 'successful',
+            data: result,
+        });
+    } catch (error) {
+        next(createError(500, 'There was an error'));
+    }
+};
+
+// get a course
+const getVideo = async (req, res, next) => {
+    try {
+        const result = await Course.findById(req.params.id);
+        if (result?._id) {
+            res.status(200).json({
+                success: true,
+                message: 'successful',
+                data: result,
+            });
+        }
+    } catch (error) {
+        next(createError(404, 'Course not found'));
+    }
+};
+// delete a video
+const deleteSingleVideo = async (req, res, next) => {
+    try {
+        await Course.findByIdAndDelete(req.params.id);
+        res.status(200).json({
+            success: true,
+            message: 'Course delete successfully',
+        });
+    } catch (error) {
+        next(createError(500, 'There was an error'));
+    }
+};
+module.exports = {
+    createCourse,
+    updateCourse,
+    enrolledCourse,
+    getAllCourse,
+    getVideo,
+    deleteSingleVideo,
+};
