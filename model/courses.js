@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 
 const courseSchema = new mongoose.Schema(
     {
+        userId: {
+            type: String,
+            required: true,
+        },
         title: {
             type: String,
             required: true,
@@ -27,12 +31,9 @@ const courseSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
-        enrolledKids: [
-            {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: 'User',
-            },
-        ],
+        enrolledKids: {
+            type: [String],
+        },
     },
     { timestamps: true }
 );

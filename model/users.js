@@ -26,6 +26,9 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: [true, 'Password  required'],
         },
+        enrolled: {
+            type: [String],
+        },
     },
     { timestamps: true }
 );
